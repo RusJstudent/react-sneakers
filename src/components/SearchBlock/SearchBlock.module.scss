@@ -1,0 +1,25 @@
+.searchBlock {
+    position: relative;
+    display: flex;
+    align-items: center;
+    border: 1px solid #f3f3f3;
+    border-radius: 10px;
+    padding: 0px 25px 0px 15px;
+
+    input {
+        border: 0;
+        padding: 13px;
+        font-size: 16px;
+        max-width: 200px;
+    }
+
+    .clearInput {
+        position: absolute;
+        right: 12px;
+        box-sizing: content-box;
+        padding: 3px;
+        width: 11px;
+        height: 11px;
+        cursor: pointer;
+    }
+}
