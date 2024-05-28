@@ -9,7 +9,6 @@ export default function Card({ imageUrl, title, price, isFavourite, onLikeClick,
                 onClick={onLikeClick}
                 alt={isFavourite ? 'liked' : 'unliked'}
             />
-            {/* <img className={classes.favourite} src="img/heart-unliked.svg" alt="unliked" /> */}
             <img src={imageUrl} width="133" height="112" className="mb-15" alt="sneakers" />
             <h5 className="mb-15">{title}</h5>
             <div className="d-flex justify-between align-center">
