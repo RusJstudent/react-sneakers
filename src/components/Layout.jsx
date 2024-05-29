@@ -7,7 +7,7 @@ import Home from '../pages/Home';
 import Favourites from "../pages/Favourites";
 
 export default function Layout() {
-    const { sneakers, updateSneakers } = useAppContext();
+    const { sneakers, updateSneakers, isLoading } = useAppContext();
     const [cartOpen, setCartOpen] = useState(false);
 
     const cartItemsPrice = sneakers.reduce((sum, item) => item.inCart ? sum + item.price : sum, 0);
@@ -15,6 +15,10 @@ export default function Layout() {
     useEffect(() => {
         document.body.style.overflowY = cartOpen ? 'hidden' : '';
     }, [cartOpen]);
+
+    if (isLoading) {
+        return <div>'Loading...'</div>;
+    }
 
     return (
         <div className="wrapper">

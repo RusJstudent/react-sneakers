@@ -6,10 +6,14 @@ import { BrowserRouter } from "react-router-dom";
 
 export default function App() {
     const [sneakers, setSneakers] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         axios.get('https://66543a331c6af63f4676ef3a.mockapi.io/items')
-            .then(response => setSneakers(response.data));
+            .then(response => {
+                setSneakers(response.data);
+                setIsLoading(false);
+            });
     }, []);
     
     function updateSneakers(item) {
@@ -18,7 +22,7 @@ export default function App() {
     }
 
     return (
-        <AppContext.Provider value={{ sneakers, updateSneakers }}>
+        <AppContext.Provider value={{ sneakers, updateSneakers, isLoading }}>
             <BrowserRouter>
                 <Layout />
             </BrowserRouter>
