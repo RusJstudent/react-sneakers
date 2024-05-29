@@ -3,6 +3,7 @@ import axios from "axios";
 import { fetchData } from './util';
 import AppContext from "./context/AppContext";
 import Layout from "./components/Layout";
+import { BrowserRouter } from "react-router-dom";
 
 export default function App() {
     const [sneakers, setSneakers] = useState([]);
@@ -36,7 +37,7 @@ export default function App() {
         if (favourites.find(favouriteItem => favouriteItem.itemId === item.itemId)) {
             updatedItems = favourites.filter(favouriteItem => favouriteItem.itemId !== item.itemId);
         } else {
-            updatedItems = [...favourites, item];
+            updatedItems = [...favourites, {...item, isFavourite: true}];
         }
 
         setFavourites(updatedItems);
@@ -45,7 +46,9 @@ export default function App() {
 
     return (
         <AppContext.Provider value={{ sneakers, cartItems, handleCartChange, favourites, handleFavouriteChange }}>
-            <Layout />
+            <BrowserRouter>
+                <Layout />
+            </BrowserRouter>
         </AppContext.Provider>
     )
 }

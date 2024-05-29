@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import Card from "../components/Card";
-import Drawer from "../components/Drawer";
-import Header from "../components/Header";
-import SearchBlock from "../components/SearchBlock";
 import { useAppContext } from "../context/AppContext";
+import { Routes, Route } from "react-router-dom";
+import Drawer from "./Drawer";
+import Header from "./Header";
+import Home from '../pages/Home';
+import Favourites from "../pages/Favourites";
 
 export default function Layout() {
-    const { sneakers, cartItems, handleCartChange, favourites, handleFavouriteChange } = useAppContext();
-    const [searchValue, setSearchValue] = useState('');
+    const { cartItems, handleCartChange } = useAppContext();
     const [cartOpen, setCartOpen] = useState(false);
 
     const cartItemsPrice = cartItems.reduce((sum, item) => sum + item.price, 0);
@@ -26,26 +26,10 @@ export default function Layout() {
                     totalPrice={cartItemsPrice}
                 />}
             <Header onCartOpen={() => setCartOpen(true)} cartPrice={cartItemsPrice} />
-            <div className="p-40"> {/* content */}
-                <div className="mb-40 d-flex align-center justify-between">
-                    <h1>Все кроссовки</h1>
-                    <SearchBlock value={searchValue} setValue={setSearchValue} />
-                </div>
-                <div className="sneakers">
-                    {sneakers
-                        .filter(item => item.title.toLowerCase().includes(searchValue.toLowerCase()))
-                        .map(item => ({ ...item, inCart: Boolean(cartItems.find(cartItem => cartItem.itemId === item.itemId)) }))
-                        .map(item => ({ ...item, isFavourite: Boolean(favourites.find(favouriteItem => favouriteItem.itemId === item.itemId)) }))
-                        .map(item =>
-                            <Card
-                                key={item.itemId}
-                                {...item}
-                                onPlusClick={() => handleCartChange(item)}
-                                onLikeClick={() => handleFavouriteChange(item)}
-                            />
-                        )}
-                </div>
-            </div>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/favourites" element={<Favourites />} />
+            </Routes>
         </div>
     )
 }

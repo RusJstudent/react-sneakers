@@ -1,3 +1,6 @@
+import Empty from "./Empty"
+import GreenButton from "./GreenButton"
+
 export default function Drawer({ items, onClose, onRemove, totalPrice }) {
     if (!items.length) {
         return (
@@ -6,14 +9,12 @@ export default function Drawer({ items, onClose, onRemove, totalPrice }) {
                     <h2 className="d-flex justify-between">
                         Корзина <img className="cu-p" src="img/btn-remove.svg" alt="remove" onClick={onClose} />
                     </h2>
-                    <div className="cartEmpty d-flex align-center justify-center flex-column flex">
-                        <img src="img/empty-cart.jpg" className="mb-20" width="120" height="120" alt="empty cart" />
-                        <h2 className="mb-10">Корзина пустая</h2>
-                        <p className="opacity-6 mb-40 text-center">Добавьте хотя бы одну пару кроссовок чтобы сделать заказ.</p>
-                        <button className="greenButton" onClick={() => onClose()}>
-                            <img src="img/arrow-right.svg" alt="arrow" />Вернуться назад
-                        </button>
-                    </div>
+                    <Empty
+                        imageUrl="img/empty-cart.jpg"
+                        title="Корзина пустая"
+                        text="Добавьте хотя бы одну пару кроссовок чтобы сделать заказ."
+                        onClose={onClose}
+                    />
                 </div>
             </div>
         )
@@ -38,7 +39,7 @@ export default function Drawer({ items, onClose, onRemove, totalPrice }) {
                     )}
                 </div>
                 <div className="cartTotal">
-                    <ul>
+                    <ul className="mb-25">
                         <li className="d-flex">
                             <span>Итого:</span>
                             <div></div>
@@ -50,7 +51,7 @@ export default function Drawer({ items, onClose, onRemove, totalPrice }) {
                             <b>{Math.round(totalPrice * 0.05)} руб.</b>
                         </li>
                     </ul>
-                    <button className="greenButton mt-25">Оформить заказ<img src="img/arrow-right.svg" alt="arrow" /></button>
+                    <GreenButton text="Оформить заказ" isArrowRight />
                 </div>
             </div>
         </div>

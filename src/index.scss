@@ -40,10 +40,20 @@ body {
     max-width: 1080px;
     margin: 50px auto;
     background: #fff;
+    min-height: calc(100vh - 100px);
+    display: flex;
+    flex-direction: column;
 }
 
 header {
     border-bottom: 1px solid #EAEAEA;
+}
+
+.content {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
 }
 
 .sneakers {
@@ -117,57 +127,5 @@ header {
         position: relative;
         top: -4px;
         margin: 0 7px;
-    }
-    .greenButton {
-        &:hover {
-            img {
-                transform: translateY(-50%) translateX(5px);
-            }
-        }
-        img {
-            position: absolute;
-            right: 33px;
-            top: 50%;
-            transform: translateY(-50%);
-            transition: 0.15s ease-in-out;
-        }
-    }
-}
-
-.cartEmpty {
-    .greenButton {
-        &:hover {
-            img {
-                transform: translateY(-50%) rotate(180deg) translateX(5px);
-            }
-        }
-        img {
-            position: absolute;
-            left: 33px;
-            top: 50%;
-            transform: translateY(-50%) rotate(180deg);
-            transition: 0.15s ease-in-out;
-        }
-    }
-}
-
-.greenButton {
-    position: relative;
-    width: 100%;
-    min-height: 55px;
-    border-radius: 18px;
-    background: #9DD458;
-    color: #fff;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: 0.2s ease-in-out;
-
-    &:hover {
-        background: lighten(#9DD458, 10%);
-    }
-
-    &:active {
-        background: darken(#9DD458, 10%)
     }
 }
