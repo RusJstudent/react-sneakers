@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useAppContext } from "../context/AppContext";
-import Card from "../components/Card";
+import Cards from "../components/Cards";
 import SearchBlock from "../components/SearchBlock";
 
 export default function Home() {
-    const { sneakers, updateSneakers } = useAppContext();
+    const { sneakers } = useAppContext();
     const [searchValue, setSearchValue] = useState('');
+
+    const filtered = sneakers.filter(item => item.title.toLowerCase().includes(searchValue.toLowerCase()));
 
     return (
         <div className="content">
@@ -13,18 +15,7 @@ export default function Home() {
                 <h1>Все кроссовки</h1>
                 <SearchBlock value={searchValue} setValue={setSearchValue} />
             </div>
-            <div className="sneakers">
-                {sneakers
-                    .filter(item => item.title.toLowerCase().includes(searchValue.toLowerCase()))
-                    .map(item =>
-                        <Card
-                            key={item.id}
-                            {...item}
-                            onPlusClick={() => updateSneakers({...item, inCart: !item.inCart})}
-                            onLikeClick={() => updateSneakers({...item, isFavourite: !item.isFavourite})}
-                        />
-                    )}
-            </div>
+            <Cards items={filtered} />
         </div>
     )
 };

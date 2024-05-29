@@ -1,9 +1,9 @@
 import { useAppContext } from "../context/AppContext";
-import Card from "../components/Card";
 import Empty from "../components/Empty";
+import Cards from "../components/Cards";
 
 export default function Favourites() {
-    const { sneakers, updateSneakers } = useAppContext();
+    const { sneakers } = useAppContext();
 
     const favourites = sneakers.filter(item => item.isFavourite);
 
@@ -23,17 +23,7 @@ export default function Favourites() {
             <div className="mb-40 d-flex align-center justify-between">
                 <h1>Мои Закладки</h1>
             </div>
-            <div className="sneakers">
-                {favourites
-                    .map(item =>
-                        <Card
-                            key={item.id}
-                            {...item}
-                            onPlusClick={() => updateSneakers({...item, inCart: !item.inCart})}
-                            onLikeClick={() => updateSneakers({...item, isFavourite: !item.isFavourite})}
-                        />
-                    )}
-            </div>
+            <Cards items={favourites} />
         </div>
     )
 };
