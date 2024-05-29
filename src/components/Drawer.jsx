@@ -34,7 +34,7 @@ export default function Drawer({ items, onClose, onRemove, totalPrice }) {
                                 <p className="mb-5">{item.title}</p>
                                 <b>{item.price} руб.</b>
                             </div>
-                            <img src="img/btn-remove.svg" className="removeBtn" onClick={() => onRemove(item)} alt="remove" />
+                            <img src="img/btn-remove.svg" className="removeBtn" onClick={() => onRemove({...item, inCart: !item.inCart})} alt="remove" />
                         </div>
                     )}
                 </div>

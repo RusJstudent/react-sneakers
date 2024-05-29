@@ -3,7 +3,9 @@ import Card from "../components/Card";
 import Empty from "../components/Empty";
 
 export default function Favourites() {
-    const { cartItems, handleCartChange, favourites, handleFavouriteChange } = useAppContext();
+    const { sneakers, updateSneakers } = useAppContext();
+
+    const favourites = sneakers.filter(item => item.isFavourite);
 
     if (!favourites.length) {
         return (
@@ -23,13 +25,12 @@ export default function Favourites() {
             </div>
             <div className="sneakers">
                 {favourites
-                    .map(item => ({ ...item, inCart: Boolean(cartItems.find(cartItem => cartItem.itemId === item.itemId)) }))
                     .map(item =>
                         <Card
-                            key={item.itemId}
+                            key={item.id}
                             {...item}
-                            onPlusClick={() => handleCartChange(item)}
-                            onLikeClick={() => handleFavouriteChange(item)}
+                            onPlusClick={() => updateSneakers({...item, inCart: !item.inCart})}
+                            onLikeClick={() => updateSneakers({...item, isFavourite: !item.isFavourite})}
                         />
                     )}
             </div>

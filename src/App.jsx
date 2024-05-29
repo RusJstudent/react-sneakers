@@ -1,54 +1,129 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { fetchData } from './util';
 import AppContext from "./context/AppContext";
 import Layout from "./components/Layout";
 import { BrowserRouter } from "react-router-dom";
 
 export default function App() {
     const [sneakers, setSneakers] = useState([]);
-    const [cartItems, setCartItems] = useState([]);
-    const [favourites, setFavourites] = useState(JSON.parse(localStorage.getItem('favourite')) || []);
 
     useEffect(() => {
-        fetchData('https://66543a331c6af63f4676ef3a.mockapi.io/items').then(setSneakers);
-        fetchData('https://66543a331c6af63f4676ef3a.mockapi.io/cart').then(setCartItems);
+        axios.get('https://66543a331c6af63f4676ef3a.mockapi.io/items')
+            .then(response => setSneakers(response.data));
     }, []);
-
-    function handleCartChange(item) {
-        let updatedItems;
-
-        if (cartItems.find(cartItem => cartItem.itemId === item.itemId)) {
-            updatedItems = cartItems.filter(cartItem => cartItem.itemId !== item.itemId);
-            fetchData('https://66543a331c6af63f4676ef3a.mockapi.io/cart')
-                .then(cartItems => cartItems.find(cartItem => cartItem.itemId === item.itemId))
-                .then(item => axios.delete(`https://66543a331c6af63f4676ef3a.mockapi.io/cart/${item.id}`))
-        } else {
-            updatedItems = [...cartItems, item];
-            axios.post('https://66543a331c6af63f4676ef3a.mockapi.io/cart', item);
-        }
-
-        setCartItems(updatedItems);
-    }
-
-    function handleFavouriteChange(item) {
-        let updatedItems;
-
-        if (favourites.find(favouriteItem => favouriteItem.itemId === item.itemId)) {
-            updatedItems = favourites.filter(favouriteItem => favouriteItem.itemId !== item.itemId);
-        } else {
-            updatedItems = [...favourites, {...item, isFavourite: true}];
-        }
-
-        setFavourites(updatedItems);
-        localStorage.setItem('favourite', JSON.stringify(updatedItems));
+    
+    function updateSneakers(item) {
+        axios.put(`https://66543a331c6af63f4676ef3a.mockapi.io/items/${item.id}`, item);
+        setSneakers(prevItems => prevItems.map(prevItem => prevItem.id === item.id ? item : prevItem));
     }
 
     return (
-        <AppContext.Provider value={{ sneakers, cartItems, handleCartChange, favourites, handleFavouriteChange }}>
+        <AppContext.Provider value={{ sneakers, updateSneakers }}>
             <BrowserRouter>
                 <Layout />
             </BrowserRouter>
         </AppContext.Provider>
     )
 }
+
+/* items BACKEND (mockAPI)
+[
+  {
+    "title": "Мужские Кроссовки Nike Blazer Mid Suede",
+    "imageUrl": "img/sneakers/1.jpg",
+    "price": 12999,
+    "id": "1",
+    "inCart": false,
+    "isFavourite": false
+  },
+  {
+    "title": "Мужские Кроссовки Nike Air Max 270",
+    "imageUrl": "img/sneakers/2.jpg",
+    "price": 12999,
+    "id": "2",
+    "inCart": false,
+    "isFavourite": false
+  },
+  {
+    "title": "Мужские Кроссовки Nike Blazer Mid Suede",
+    "imageUrl": "img/sneakers/3.jpg",
+    "price": 8499,
+    "id": "3",
+    "inCart": false,
+    "isFavourite": false
+  },
+  {
+    "title": "Кроссовки Puma X Aka Boku Future Rider",
+    "imageUrl": "img/sneakers/4.jpg",
+    "price": 8999,
+    "id": "4",
+    "inCart": false,
+    "isFavourite": false
+  },
+  {
+    "title": "Мужские Кроссовки Under Armour Curry 8",
+    "imageUrl": "img/sneakers/5.jpg",
+    "price": 15199,
+    "id": "5",
+    "inCart": false,
+    "isFavourite": false
+  },
+  {
+    "title": "Мужские Кроссовки Nike Kyrie 7",
+    "imageUrl": "img/sneakers/6.jpg",
+    "price": 11299,
+    "id": "6",
+    "inCart": false,
+    "isFavourite": false
+  },
+  {
+    "title": "Мужские Кроссовки Jordan Air Jordan 11",
+    "imageUrl": "img/sneakers/7.jpg",
+    "price": 10799,
+    "id": "7",
+    "inCart": false,
+    "isFavourite": false
+  },
+  {
+    "title": "Мужские Кроссовки Nike LeBron XVIII",
+    "imageUrl": "img/sneakers/8.jpg",
+    "price": 16499,
+    "id": "8",
+    "inCart": false,
+    "isFavourite": false
+  },
+  {
+    "title": "Мужские Кроссовки Nike Lebron XVIII Low",
+    "imageUrl": "img/sneakers/9.jpg",
+    "price": 13999,
+    "id": "9",
+    "inCart": false,
+    "isFavourite": false
+  },
+  {
+    "title": "Мужские Кроссовки Nike Blazer Mid Suede",
+    "imageUrl": "img/sneakers/10.jpg",
+    "price": 8499,
+    "id": "10",
+    "inCart": false,
+    "isFavourite": false
+  },
+  {
+    "title": "Кроссовки Puma X Aka Boku Future Rider",
+    "imageUrl": "img/sneakers/11.jpg",
+    "price": 8999,
+    "id": "11",
+    "inCart": false,
+    "isFavourite": false
+  },
+  {
+    "title": "Мужские Кроссовки Nike Kyrie Flytrap IV",
+    "imageUrl": "img/sneakers/12.jpg",
+    "price": 11299,
+    "id": "12",
+    "inCart": false,
+    "isFavourite": false
+  }
+]
+
+*/

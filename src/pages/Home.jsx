@@ -4,7 +4,7 @@ import Card from "../components/Card";
 import SearchBlock from "../components/SearchBlock";
 
 export default function Home() {
-    const { sneakers, cartItems, handleCartChange, favourites, handleFavouriteChange } = useAppContext();
+    const { sneakers, updateSneakers } = useAppContext();
     const [searchValue, setSearchValue] = useState('');
 
     return (
@@ -16,14 +16,12 @@ export default function Home() {
             <div className="sneakers">
                 {sneakers
                     .filter(item => item.title.toLowerCase().includes(searchValue.toLowerCase()))
-                    .map(item => ({ ...item, inCart: Boolean(cartItems.find(cartItem => cartItem.itemId === item.itemId)) }))
-                    .map(item => ({ ...item, isFavourite: Boolean(favourites.find(favouriteItem => favouriteItem.itemId === item.itemId)) }))
                     .map(item =>
                         <Card
-                            key={item.itemId}
+                            key={item.id}
                             {...item}
-                            onPlusClick={() => handleCartChange(item)}
-                            onLikeClick={() => handleFavouriteChange(item)}
+                            onPlusClick={() => updateSneakers({...item, inCart: !item.inCart})}
+                            onLikeClick={() => updateSneakers({...item, isFavourite: !item.isFavourite})}
                         />
                     )}
             </div>

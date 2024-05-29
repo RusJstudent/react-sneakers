@@ -7,10 +7,10 @@ import Home from '../pages/Home';
 import Favourites from "../pages/Favourites";
 
 export default function Layout() {
-    const { cartItems, handleCartChange } = useAppContext();
+    const { sneakers, updateSneakers } = useAppContext();
     const [cartOpen, setCartOpen] = useState(false);
 
-    const cartItemsPrice = cartItems.reduce((sum, item) => sum + item.price, 0);
+    const cartItemsPrice = sneakers.reduce((sum, item) => item.inCart ? sum + item.price : sum, 0);
 
     useEffect(() => {
         document.body.style.overflowY = cartOpen ? 'hidden' : '';
@@ -20,9 +20,9 @@ export default function Layout() {
         <div className="wrapper">
             {cartOpen &&
                 <Drawer
-                    items={cartItems}
+                    items={sneakers.filter(item => item.inCart)}
                     onClose={() => setCartOpen(false)}
-                    onRemove={handleCartChange}
+                    onRemove={updateSneakers}
                     totalPrice={cartItemsPrice}
                 />}
             <Header onCartOpen={() => setCartOpen(true)} cartPrice={cartItemsPrice} />
