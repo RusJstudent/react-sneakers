@@ -16,11 +16,14 @@ export default function App() {
                 .then(response => setSneakers(response.data)),
             axios.get('https://66543a331c6af63f4676ef3a.mockapi.io/orders')
                 .then(response => setOrders(response.data)),
-        ]).then(result => setIsLoading(false));
+        ])
+        .catch(err => console.log('Ошибка при получении данных:', err))
+        .then(result => setIsLoading(false));
     }, []);
 
     function updateSneakers(item) {
-        axios.put(`https://66543a331c6af63f4676ef3a.mockapi.io/items/${item.id}`, item);
+        axios.put(`https://66543a331c6af63f4676ef3a.mockapi.io/items/${item.id}`, item)
+            .catch(err => console.log('Ошибка при обновлении данных:', err));
         setSneakers(prevItems => prevItems.map(prevItem => prevItem.id === item.id ? item : prevItem));
     }
 
@@ -28,6 +31,7 @@ export default function App() {
         setIsOrdering(true);
         items.forEach(item => updateSneakers({ ...item, inCart: false }));
         axios.post('https://66543a331c6af63f4676ef3a.mockapi.io/orders', { items })
+            .catch(err => console.log('Ошибка при создании заказа:', err))
             .then(responce => {
                 setOrders(orders => [...orders, responce.data]);
                 setIsOrdering(false);
