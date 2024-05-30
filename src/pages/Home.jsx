@@ -11,7 +11,7 @@ export default function Home() {
 
     return (
         <div className="content">
-            <div className="mb-40 d-flex align-center justify-between">
+            <div style={{rowGap: 30}} className="mb-40 d-flex align-center justify-between flex-wrap">
                 <h1>Все кроссовки</h1>
                 <SearchBlock value={searchValue} setValue={setSearchValue} />
             </div>
