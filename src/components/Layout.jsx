@@ -27,13 +27,13 @@ export default function Layout() {
 
     return (
         <div className="wrapper">
-            {cartOpen &&
-                <Drawer
-                    items={sneakers.filter(item => item.inCart)}
-                    onClose={() => setCartOpen(false)}
-                    onRemove={updateSneakers}
-                    totalPrice={cartItemsPrice}
-                />}
+            <Drawer
+                items={sneakers.filter(item => item.inCart)}
+                onClose={() => setCartOpen(false)}
+                onRemove={updateSneakers}
+                totalPrice={cartItemsPrice}
+                open={cartOpen}
+            />
             <Header onCartOpen={() => setCartOpen(true)} cartPrice={cartItemsPrice} />
             {isLoading
                 ? loader

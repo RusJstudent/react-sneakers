@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import Info from "./Info"
-import GreenButton from "./GreenButton"
-import { useAppContext } from "../context/AppContext"
+import Info from "../Info"
+import GreenButton from "../GreenButton"
+import { useAppContext } from "../../context/AppContext"
+import classes from './Drawer.module.scss';
 
-export default function Drawer({ items, onClose, onRemove, totalPrice }) {
+export default function Drawer({ items, onClose, onRemove, totalPrice, open }) {
     const [isOrdered, setIsOrdered] = useState(false);
     const { makeOrder, orders, isOrdering } = useAppContext();
 
@@ -48,19 +49,19 @@ export default function Drawer({ items, onClose, onRemove, totalPrice }) {
     } else {
         content = (
             <>
-                <div className="cartItems mt-30">
+                <div className={classes.cartItems}>
                     {items.map(item =>
-                        <div key={item.id} className="cartItem d-flex align-center">
+                        <div key={item.id} className={classes.cartItem}>
                             <img src={item.imageUrl} style={{ marginTop: -10 }} width="70" height="70" alt="sneakers" />
                             <div className="ml-20 mr-20">
                                 <p className="mb-5">{item.title}</p>
                                 <b>{item.price} руб.</b>
                             </div>
-                            <img src="img/btn-remove.svg" className="removeBtn" onClick={() => onRemove({ ...item, inCart: false })} alt="remove" />
+                            <img src="img/btn-remove.svg" className={classes.removeBtn} onClick={() => onRemove({ ...item, inCart: false })} alt="remove" />
                         </div>
                     )}
                 </div>
-                <div className="cartTotal">
+                <div className={classes.cartTotal}>
                     <ul className="mb-25">
                         <li className="d-flex">
                             <span>Итого:</span>
@@ -80,8 +81,8 @@ export default function Drawer({ items, onClose, onRemove, totalPrice }) {
     }
 
     return (
-        <div className="overlay" onClick={e => !e.target.closest('.drawer') && closeCartHandler()}>
-            <div className="drawer">
+        <div style={{ visibility: open ? 'visible' : 'hidden' }} className={classes.overlay} onClick={e => !e.target.closest(`.${classes.drawer}`) && closeCartHandler()}>
+            <div className={`${classes.drawer} ${open ? classes.open : ''}`}>
                 <h2 className="d-flex justify-between">
                     Корзина <img className="cu-p" src="img/btn-remove.svg" alt="remove" onClick={closeCartHandler} />
                 </h2>

@@ -1,0 +1,80 @@
+.overlay {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10;
+}
+
+.drawer {
+    position: absolute;
+    right: 0;
+    height: 100%;
+    width: 415px;
+    padding: 30px;
+    background: #fff;
+    box-shadow: -10px 4px 24px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    @media (max-width: 415px) {
+        width: 100%;
+    }
+
+    opacity: 0;
+    transition: 0.3s;
+    transform: translateX(100%);
+    &.open {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    .cartItems {
+        margin: 30px 0px 40px 0px;
+        flex: 1;
+        overflow: auto;
+        & > *:not(:last-child) {
+            margin: 0px 0px 20px 0px;
+        }
+    }
+}
+
+.cartItem {
+    display: flex;
+    align-items: center;
+    border: 1px solid #f3f3f3;
+    border-radius: 20px;
+    padding: 20px 20px 30px 20px;
+
+    p {
+        font-size: 14px;
+    }
+
+    b {
+        font-size: 14px;
+    }
+
+    .removeBtn {
+        opacity: 0.5;
+        transition: 0.2s ease-in-out;
+        cursor: pointer;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+}
+
+.cartTotal {
+    ul>li:not(:last-child) {
+        margin: 0px 0px 20px 0px;
+    }
+    ul>li>div {
+        flex: 1;
+        border-bottom: 1px dashed #dfdfdf;
+        position: relative;
+        top: -4px;
+        margin: 0 7px;
+    }
+}
