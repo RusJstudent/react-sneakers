@@ -5,24 +5,32 @@ import Info from "../components/Info";
 export default function Home() {
     const { sneakers, updateSneakers, orders } = useAppContext();
 
-    const orderedItems = orders.reduce((acc, order) => [...acc, ...order.items.map(orderItem => sneakers.find(item => item.id === orderItem.id))] , []);
+    const particularOrders = orders.reduce((acc, order) => {
+        acc.push({ items: order.items.map(orderItem => sneakers.find(item => item.id === orderItem.id)), id: order.id })
+        return acc;
+    }, []);
 
     return (
         <div className="content">
             <div className="mb-40 d-flex align-center justify-between">
                 <h1>Мои покупки</h1>
             </div>
-            {orderedItems.length
-                ? <div className="sneakers">
-                    {orderedItems.map((item, idx) =>
-                        <Card
-                            key={idx}
-                            {...item}
-                            onPlusClick={() => updateSneakers({ ...item, inCart: !item.inCart })}
-                            onLikeClick={() => updateSneakers({ ...item, isFavourite: !item.isFavourite })}
-                        />
-                    )}
-                </div>
+            {particularOrders.length
+                ? particularOrders.reverse().map(particularOrder => 
+                    <div key={particularOrder.id} className="particularOrder">
+                        <h2 className="mb-30">Заказ #{particularOrder.id}</h2>
+                        <div className="sneakers">
+                            {particularOrder.items.map((item, idx) =>
+                                <Card
+                                    key={idx}
+                                    {...item}
+                                    onPlusClick={() => updateSneakers({ ...item, inCart: !item.inCart })}
+                                    onLikeClick={() => updateSneakers({ ...item, isFavourite: !item.isFavourite })}
+                                />
+                            )}
+                        </div>
+                    </div>
+                )
                 : <Info
                     imageUrl="img/emoji/tears.jpg"
                     title="У вас нет заказов"
