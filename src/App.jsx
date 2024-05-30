@@ -6,23 +6,36 @@ import { BrowserRouter } from "react-router-dom";
 
 export default function App() {
     const [sneakers, setSneakers] = useState([]);
+    const [orders, setOrders] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isOrdering, setIsOrdering] = useState(false);
 
     useEffect(() => {
-        axios.get('https://66543a331c6af63f4676ef3a.mockapi.io/items')
-            .then(response => {
-                setSneakers(response.data);
-                setIsLoading(false);
-            });
+        Promise.all([
+            axios.get('https://66543a331c6af63f4676ef3a.mockapi.io/items')
+                .then(response => setSneakers(response.data)),
+            axios.get('https://66543a331c6af63f4676ef3a.mockapi.io/orders')
+                .then(response => setOrders(response.data)),
+        ]).then(result => setIsLoading(false));
     }, []);
-    
+
     function updateSneakers(item) {
         axios.put(`https://66543a331c6af63f4676ef3a.mockapi.io/items/${item.id}`, item);
         setSneakers(prevItems => prevItems.map(prevItem => prevItem.id === item.id ? item : prevItem));
     }
 
+    function makeOrder(items) {
+        setIsOrdering(true);
+        items.forEach(item => updateSneakers({ ...item, inCart: false }));
+        axios.post('https://66543a331c6af63f4676ef3a.mockapi.io/orders', { items })
+            .then(responce => {
+                setOrders(orders => [...orders, responce.data]);
+                setIsOrdering(false);
+            });
+    }
+
     return (
-        <AppContext.Provider value={{ sneakers, updateSneakers, isLoading }}>
+        <AppContext.Provider value={{ sneakers, updateSneakers, isLoading, makeOrder, orders, isOrdering }}>
             <BrowserRouter>
                 <Layout />
             </BrowserRouter>
@@ -30,7 +43,8 @@ export default function App() {
     )
 }
 
-/* items BACKEND (mockAPI)
+/* Backend (mockAPI)
+// items
 [
   {
     "title": "Мужские Кроссовки Nike Blazer Mid Suede",

@@ -5,6 +5,7 @@ import Drawer from "./Drawer";
 import Header from "./Header";
 import Home from '../pages/Home';
 import Favourites from "../pages/Favourites";
+import Orders from "../pages/Orders";
 
 export default function Layout() {
     const { sneakers, updateSneakers, isLoading } = useAppContext();
@@ -16,9 +17,13 @@ export default function Layout() {
         document.body.style.overflowY = cartOpen ? 'hidden' : '';
     }, [cartOpen]);
 
-    if (isLoading) {
-        return <div>'Loading...'</div>;
-    }
+    const loader = (
+        <div className="content">
+            <div className="mb-40 d-flex align-center justify-between">
+                <h1>Загрузка...</h1>
+            </div>
+        </div>
+    );
 
     return (
         <div className="wrapper">
@@ -30,10 +35,14 @@ export default function Layout() {
                     totalPrice={cartItemsPrice}
                 />}
             <Header onCartOpen={() => setCartOpen(true)} cartPrice={cartItemsPrice} />
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/favourites" element={<Favourites />} />
-            </Routes>
+            {isLoading
+                ? loader
+                : <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/favourites" element={<Favourites />} />
+                    <Route path="/orders" element={<Orders />} />
+                </Routes>
+            }
         </div>
     )
 }

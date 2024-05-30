@@ -24,8 +24,10 @@ export default function Header({ onCartOpen, cartPrice }) {
                     </Link>
                 </li>
                 <li className="d-flex align-center">
-                    <img src="img/user.svg" width="18" height="18" alt="user" />
-                    <span className="ml-10">Профиль</span>
+                    <Link to="/orders" style={{ color: 'inherit', textDecoration: 'none' }}>
+                        <img src="img/user.svg" width="18" height="18" alt="user" />
+                        <span className="ml-10">Профиль</span>
+                    </Link>
                 </li>
             </ul>
         </header>

@@ -1,31 +1,53 @@
-import Empty from "./Empty"
+import { useState } from 'react';
+import Info from "./Info"
 import GreenButton from "./GreenButton"
+import { useAppContext } from "../context/AppContext"
 
 export default function Drawer({ items, onClose, onRemove, totalPrice }) {
-    if (!items.length) {
-        return (
-            <div className="overlay" onClick={e => !e.target.closest('.drawer') && onClose()}>
-                <div className="drawer">
-                    <h2 className="d-flex justify-between">
-                        Корзина <img className="cu-p" src="img/btn-remove.svg" alt="remove" onClick={onClose} />
-                    </h2>
-                    <Empty
-                        imageUrl="img/empty-cart.jpg"
-                        title="Корзина пустая"
-                        text="Добавьте хотя бы одну пару кроссовок чтобы сделать заказ."
-                        onClose={onClose}
-                    />
-                </div>
-            </div>
-        )
+    const [isOrdered, setIsOrdered] = useState(false);
+    const { makeOrder, orders, isOrdering } = useAppContext();
+
+    function makeOrderHandler() {
+        makeOrder(items);
+        setIsOrdered(true);
     }
 
-    return (
-        <div className="overlay" onClick={e => !e.target.closest('.drawer') && onClose()}>
-            <div className="drawer">
-                <h2 className="d-flex justify-between">
-                    Корзина <img className="cu-p" src="img/btn-remove.svg" alt="remove" onClick={onClose} />
-                </h2>
+    function closeCartHandler() {
+        onClose();
+        setIsOrdered(false);
+    }
+
+    let content;
+    if (isOrdering) {
+        content = (
+            <Info
+                imageUrl="img/loading.jpg"
+                title="Загрузка"
+                text={`Оформляем заказ...`}
+                onClose={closeCartHandler}
+            />
+        )
+    } else if (isOrdered) {
+        content = (
+            <Info
+                imageUrl="img/order.jpg"
+                title="Заказ оформлен"
+                text={`Ваш заказ #${orders[orders.length - 1].id} скоро будет передан курьерской доставке.`}
+                onClose={closeCartHandler}
+            />
+        )
+    } else if (!items.length) {
+        content = (
+            <Info
+                imageUrl="img/empty-cart.jpg"
+                title="Корзина пустая"
+                text="Добавьте хотя бы одну пару кроссовок чтобы сделать заказ."
+                onClose={closeCartHandler}
+            />
+        )
+    } else {
+        content = (
+            <>
                 <div className="cartItems mt-30">
                     {items.map(item =>
                         <div key={item.id} className="cartItem d-flex align-center">
@@ -34,7 +56,7 @@ export default function Drawer({ items, onClose, onRemove, totalPrice }) {
                                 <p className="mb-5">{item.title}</p>
                                 <b>{item.price} руб.</b>
                             </div>
-                            <img src="img/btn-remove.svg" className="removeBtn" onClick={() => onRemove({...item, inCart: false})} alt="remove" />
+                            <img src="img/btn-remove.svg" className="removeBtn" onClick={() => onRemove({ ...item, inCart: false })} alt="remove" />
                         </div>
                     )}
                 </div>
@@ -51,8 +73,19 @@ export default function Drawer({ items, onClose, onRemove, totalPrice }) {
                             <b>{Math.round(totalPrice * 0.05)} руб.</b>
                         </li>
                     </ul>
-                    <GreenButton text="Оформить заказ" isArrowRight />
+                    <GreenButton text="Оформить заказ" isArrowRight onClick={makeOrderHandler} />
                 </div>
+            </>
+        )
+    }
+
+    return (
+        <div className="overlay" onClick={e => !e.target.closest('.drawer') && closeCartHandler()}>
+            <div className="drawer">
+                <h2 className="d-flex justify-between">
+                    Корзина <img className="cu-p" src="img/btn-remove.svg" alt="remove" onClick={closeCartHandler} />
+                </h2>
+                {content}
             </div>
         </div>
     )

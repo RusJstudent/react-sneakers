@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAppContext } from "../context/AppContext";
-import Empty from "../components/Empty";
+import Info from "../components/Info";
 import Cards from "../components/Cards";
 
 function getFavouritesIds(items) {
@@ -23,7 +23,7 @@ export default function Favourites() {
             </div>
             {favourites.length
                 ? <Cards items={favourites} />
-                : <Empty imageUrl="img/sad.jpg" title="Закладок нет :(" text="Вы ничего не добавляли в закладки" />
+                : <Info imageUrl="img/emoji/sad.jpg" title="Закладок нет :(" text="Вы ничего не добавляли в закладки" />
             }
         </div>
     )
