@@ -4,6 +4,8 @@ import AppContext from "./context/AppContext";
 import Layout from "./components/Layout";
 import { BrowserRouter } from "react-router-dom";
 
+const serverURL = 'https://66543a331c6af63f4676ef3a.mockapi.io';
+
 export default function App() {
     const [sneakers, setSneakers] = useState([]);
     const [orders, setOrders] = useState([]);
@@ -12,9 +14,9 @@ export default function App() {
 
     useEffect(() => {
         Promise.all([
-            axios.get('https://66543a331c6af63f4676ef3a.mockapi.io/items')
+            axios.get(`${serverURL}/items`)
                 .then(response => setSneakers(response.data)),
-            axios.get('https://66543a331c6af63f4676ef3a.mockapi.io/orders')
+            axios.get(`${serverURL}/orders`)
                 .then(response => setOrders(response.data)),
         ])
         .catch(err => console.log('Ошибка при получении данных:', err))
@@ -22,7 +24,7 @@ export default function App() {
     }, []);
 
     function updateSneakers(item) {
-        axios.put(`https://66543a331c6af63f4676ef3a.mockapi.io/items/${item.id}`, item)
+        axios.put(`${serverURL}/items/${item.id}`, item)
             .catch(err => console.log('Ошибка при обновлении данных:', err));
         setSneakers(prevItems => prevItems.map(prevItem => prevItem.id === item.id ? item : prevItem));
     }
@@ -30,7 +32,7 @@ export default function App() {
     function makeOrder(items) {
         setIsOrdering(true);
         items.forEach(item => updateSneakers({ ...item, inCart: false }));
-        axios.post('https://66543a331c6af63f4676ef3a.mockapi.io/orders', { items })
+        axios.post(`${serverURL}/orders`, { items })
             .catch(err => console.log('Ошибка при создании заказа:', err))
             .then(responce => {
                 setOrders(orders => [...orders, responce.data]);
