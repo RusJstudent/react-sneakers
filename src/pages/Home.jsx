@@ -11,6 +11,9 @@ export default function Home() {
 
     return (
         <div className="content">
+            <div>
+                <img className="w100p mb-25" src="img/adds.jpg" alt="adds" />
+            </div>
             <div style={{rowGap: 30}} className="mb-40 d-flex align-center justify-between flex-wrap">
                 <h1>Все кроссовки</h1>
                 <SearchBlock value={searchValue} setValue={setSearchValue} />
