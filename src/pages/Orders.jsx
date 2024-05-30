@@ -1,9 +1,11 @@
 import { useAppContext } from "../context/AppContext";
 import Card from "../components/Card";
 import Info from "../components/Info";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
-    const { sneakers, updateSneakers, orders } = useAppContext();
+    const { sneakers, orders } = useAppContext();
+    const navigate = useNavigate();
 
     const particularOrders = orders.reduce((acc, order) => {
         acc.push({ items: order.items.map(orderItem => sneakers.find(item => item.id === orderItem.id)), id: order.id })
@@ -34,7 +36,7 @@ export default function Home() {
                     imageUrl="img/emoji/tears.jpg"
                     title="У вас нет заказов"
                     text={<>Вы нищеброд?<br />Оформите хотя бы один заказ.</>}
-                    onClose={() => { }}
+                    onClose={() => navigate('/')}
                 />
             }
         </div>

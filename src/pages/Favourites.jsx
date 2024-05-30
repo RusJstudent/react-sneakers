@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAppContext } from "../context/AppContext";
 import Info from "../components/Info";
 import Cards from "../components/Cards";
+import { useNavigate } from 'react-router-dom';
 
 function getFavouritesIds(items) {
     return items.reduce((acc, item) => {
@@ -11,6 +12,7 @@ function getFavouritesIds(items) {
 }
 
 export default function Favourites() {
+    const navigate = useNavigate();
     const { sneakers } = useAppContext();
     const [preservedIds, setPreservedIds] = useState(getFavouritesIds(sneakers));
 
@@ -23,7 +25,12 @@ export default function Favourites() {
             </div>
             {favourites.length
                 ? <Cards items={favourites} />
-                : <Info imageUrl="img/emoji/sad.jpg" title="Закладок нет :(" text="Вы ничего не добавляли в закладки" />
+                : <Info
+                    imageUrl="img/emoji/sad.jpg"
+                    title="Закладок нет :("
+                    text="Вы ничего не добавляли в закладки"
+                    onClose={() => navigate('/')}
+                />
             }
         </div>
     )
