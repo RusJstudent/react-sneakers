@@ -24,8 +24,7 @@ export default function Home() {
                                 <Card
                                     key={idx}
                                     {...item}
-                                    onPlusClick={() => updateSneakers({ ...item, inCart: !item.inCart })}
-                                    onLikeClick={() => updateSneakers({ ...item, isFavourite: !item.isFavourite })}
+                                    bought
                                 />
                             )}
                         </div>
