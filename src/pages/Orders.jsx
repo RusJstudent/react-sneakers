@@ -2,9 +2,10 @@ import { useAppContext } from "../context/AppContext";
 import Card from "../components/Card";
 import Info from "../components/Info";
 import { useNavigate } from "react-router-dom";
+import RedButton from "../components/RedButton";
 
 export default function Home() {
-    const { sneakers, orders } = useAppContext();
+    const { sneakers, orders, removeOrder } = useAppContext();
     const navigate = useNavigate();
 
     const particularOrders = orders.reduce((acc, order) => {
@@ -18,9 +19,12 @@ export default function Home() {
                 <h1>Мои покупки</h1>
             </div>
             {particularOrders.length
-                ? particularOrders.reverse().map(particularOrder => 
+                ? particularOrders.reverse().map(particularOrder =>
                     <div key={particularOrder.id} className="particularOrder">
-                        <h2 className="mb-30">Заказ #{particularOrder.id}</h2>
+                        <div className="d-flex justify-between align-center mb-30">
+                            <h2>Заказ #{particularOrder.id}</h2>
+                            <RedButton onClick={() => removeOrder(particularOrder.id)} text="Удалить" />
+                        </div>
                         <div className="sneakers">
                             {particularOrder.items.map((item, idx) =>
                                 <Card

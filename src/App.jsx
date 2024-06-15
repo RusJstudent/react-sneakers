@@ -34,14 +34,22 @@ export default function App() {
         items.forEach(item => updateSneakers({ ...item, inCart: false }));
         axios.post(`${serverURL}/orders`, { items })
             .catch(err => console.log('Ошибка при создании заказа:', err))
-            .then(responce => {
-                setOrders(orders => [...orders, responce.data]);
+            .then(response => {
+                setOrders(orders => [...orders, response.data]);
                 setIsOrdering(false);
             });
     }
 
+    function removeOrder(orderId) {
+      axios.delete(`${serverURL}/orders/${orderId}`)
+          .catch(err => console.log('Ошибка при удалении заказа:', err))
+          .then(response => {
+              setOrders(orders => orders.filter(order => order.id !== orderId))
+          });
+  }
+
     return (
-        <AppContext.Provider value={{ sneakers, updateSneakers, isLoading, makeOrder, orders, isOrdering }}>
+        <AppContext.Provider value={{ sneakers, updateSneakers, isLoading, makeOrder, orders, isOrdering, removeOrder }}>
             <BrowserRouter>
                 <Layout />
             </BrowserRouter>
